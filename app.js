@@ -31,10 +31,7 @@ passport.use(new TwitterStrategy({
     callbackURL: "https://intense-everglades-31015.herokuapp.com/auth/twitter/callback"
   },
   function(token, tokenSecret, profile, done) {
-    User.findOrCreate(..., function(err, user) {
-      if (err) { return done(err); }
-      done(null, user);
-    });
+    console.log(profile);
   }
 ));
 

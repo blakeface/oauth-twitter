@@ -1,14 +1,16 @@
 var express = require('express');
 var router = express.Router();
+var passport = require('passport');
+
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index', { title: 'Twitter OAuth' });
 });
 
-Router.get('/auth/twitter', passport.authenticate('twitter'));
+router.get('/auth/twitter', passport.authenticate('twitter'));
 
-Router.get('/auth/twitter/callback', passport.authenticate('twitter', {
+router.get('/auth/twitter/callback', passport.authenticate('twitter', {
   successRedirect: '/',
   failureRedirect: '/login'
 }));
