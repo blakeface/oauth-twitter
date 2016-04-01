@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var passport = require('passport');
 var TwitterStrategy = require('passport-twitter').Strategy;
 var dotenv = require('dotenv').load();
+var session = require('express-session');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -24,6 +25,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+  secret: 'secret',
+  resave: false,
+  saveUninitialized: false 
+}));
 
 passport.use(new TwitterStrategy({
     consumerKey: process.env.TWITTER_CONSUMER_KEY,
