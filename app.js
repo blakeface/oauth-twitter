@@ -28,22 +28,24 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
   secret: 'secret',
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  name: "session"
 }));
 app.use(passport.initialize());
 app.use(passport.session());
 
 passport.use(new TwitterStrategy({
-    consumerKey: process.env.TWITTER_CONSUMER_KEY,
-    consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
-    callbackURL: "http://localhost:3000/auth/twitter/callback"
-  },
-  function(token, tokenSecret, profile, done) {
-    done(null, {
-      id: profile.id,
-      username: profile.username
-    })
-  }
+  consumerKey: process.env.TWITTER_CONSUMER_KEY,
+  consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
+  callbackURL: "http://localhost:3000/auth/twitter/callback"
+},
+function(token, tokenSecret, profile, done) {
+  done(null, {
+    id: profile.id,
+    name: profile.displayName,
+    profileImageURL: profile.photos[0].value
+  })
+}
 ));
 
 passport.serializeUser(function(user, done) {
@@ -54,6 +56,10 @@ passport.deserializeUser(function(user, done) {
   done(null, user);
 });
 
+// app.use(function (req, res, next) {
+//   res.locals.user = req.session.passport.user
+//   next()
+// })
 
 app.use('/', routes);
 app.use('/users', users);

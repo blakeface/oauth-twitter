@@ -15,4 +15,10 @@ router.get('/auth/twitter/callback', passport.authenticate('twitter', {
   failureRedirect: '/login'
 }));
 
+router.get('/logout', function(req, res, next) {
+  req.session.destroy();
+  res.redirect('/');
+});
+
+
 module.exports = router;
