@@ -28,18 +28,32 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
   secret: 'secret',
   resave: false,
-  saveUninitialized: false 
+  saveUninitialized: false
 }));
+app.use(passport.initialize());
+app.use(passport.session());
 
 passport.use(new TwitterStrategy({
     consumerKey: process.env.TWITTER_CONSUMER_KEY,
     consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
-    callbackURL: "https://intense-everglades-31015.herokuapp.com/auth/twitter/callback"
+    callbackURL: "http://localhost:3000/auth/twitter/callback"
   },
   function(token, tokenSecret, profile, done) {
-    console.log(profile);
+    done(null, {
+      id: profile.id,
+      username: profile.username
+    })
   }
 ));
+
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(user, done) {
+  done(null, user);
+});
+
 
 app.use('/', routes);
 app.use('/users', users);
